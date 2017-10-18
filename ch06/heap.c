@@ -1,34 +1,66 @@
 #include <stdio.h>
 #include <math.h>
+#define length(array) (int) (sizeof((array))/ sizeof((array)[0]))
 
-static double parent(double x);
-static double left(double x);
-static double right(double x);
-
-
-double parent(double x){
-	return floor((x-1)/2); // indice 0
+static int parent(int A[], int x){
+	return *(A + (int) floor((x-1)/2));
 }
 
 
-
-double left(double x){
-	return floor((2*x+1));
+static int lvalue(int A[], int x){
+	return *(A + (int) floor((2*x+1)));
 }
 
-double right(double x){
-	return floor(2*x+2);
+static int left(int A[], int x){
+	return (int) floor((2*x+1)); // left(A,3) returns [node] 8
+}
+
+static int rvalue(int A[], int x){
+	return *(A + (int) floor((2*x+2)));
+}
+
+static int right(int A[], int x){
+	return (int) (floor(2*x+2));
+}
+
+static int maxheapify(int A[], int i){
+	int l = left(A, i);
+	int r = right(A, i);
+	int largest, temp;
+
+	if(l < length(A) && A[l] > A[i]){
+		largest = l;
+	} else{
+		largest = i;
+	}
+
+	if (r <= length(A) && A[r] > A[largest]){
+		largest = r;
+	}
+	if (largest != i){
+		temp = A[i];
+		A[i] = A[largest];
+		A[largest] = temp;
+
+		maxheapify(A, largest);
+	}
+
+	return A[largest];
 }
 
 int main(){
-	double A[]= {0,1,2,3,4,5,6,7,8,9,10};
-	int length = sizeof(A)/sizeof(A[0]);
+	//int length = sizeof(A)/sizeof(A[0]);
+	int A[]= {10,20,30,40,50,60,70,80,90, 100, 110, 120, 130, 140, 150};
 
-	for(int i=0; i < length; i++){
-	printf("A[%d]= %1lf\n", i, parent(A[i]));
+	printf("%d\n", length(A));
+	printf("%d\n", maxheapify(A, 0));
+	/*
+	for (int i=0; i < length; i++){
+	printf("parent vertex of arr[%d], value %d = %d\n", i, B[i], parent(B,i));
 	}
 
-	printf(" %1lf\n", *(A+14));
-
+	for(int i=0; i < length; i++){
+		printf("right leaf of arr[%d], value %d = %d\n", i, B[i], right(B,i));
+	}*/
 	return 0;
 }
