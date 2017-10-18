@@ -45,7 +45,7 @@ static int maxheapify(int A[], int i){
 		maxheapify(A, largest);
 	}
 
-	return A[largest];
+	return largest;
 }
 
 int main(){
